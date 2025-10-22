@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -14,21 +14,33 @@ export class RiotService {
     private liveClientUrl = 'https://127.0.0.1:2999/liveclientdata/allgamedata'; //-- Este saca la data del cliente cuando juego, mientras este la ventana del cliente abierta.
 
 
-    constructor(private http: HttpClient){}
+    constructor(private http: HttpClient) { }
 
 
-    getChampionData(): Observable<any>{ //--Trae los campeones.
+    getChampionsData(): Observable<any> { //--Trae los campeones.
         return this.http.get(`${this.ddragonBase}/${this.version}/data/es_ES/champion.json`)
     }
-    
-    
-    getItemData(): Observable<any>{ //--Trae los items.
+
+
+    getChampionData(championName: string): Observable<any> { //--Trae un solo campeón
+        return this.http.get(`${this.ddragonBase}/${this.version}/data/es_ES/${championName}.json`)
+        .pipe(map((res: any) => res.data[championName]))
+    }
+
+
+    getChampionImage(championName: string): string { //--Trae imagen del campeón
+        return `${this.ddragonBase}/${this.version}/img/champion/${championName}.png`
+    }
+
+
+
+    getItemData(): Observable<any> { //--Trae los items.
         return this.http.get(`${this.ddragonBase}/${this.version}/data/es_ES/item.json`)
     }
 
 
-    getLiveClientData(): Observable<any>{ //--Trae data del cliente actual.
-        return this.http.get(this.liveClientUrl, {withCredentials: false})
+    getLiveClientData(): Observable<any> { //--Trae data del cliente actual.
+        return this.http.get(this.liveClientUrl, { withCredentials: false })
     }
 
 
