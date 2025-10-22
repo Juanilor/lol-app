@@ -9,27 +9,25 @@ import { Observable } from "rxjs";
 
 export class RiotService {
 
-    private ddragonBase = 'https://ddragon.leagueoflegends.com/cdn'
-    private version = '14.20.1' //Se puede hacer fetch a diferentes versiones, anteriores a la ultima
-    private liveClientUrl = 'https://127.0.0.1:2999/liveclientdata/allgamedata';
+    private ddragonBase = 'https://ddragon.leagueoflegends.com/cdn' //-- Este para sacar la data estatica del servidor (imagenes, items, campeones, descripciones, etc).
+    private version = '14.20.1' //--Se puede hacer fetch a diferentes versiones, anteriores a la ultima.
+    private liveClientUrl = 'https://127.0.0.1:2999/liveclientdata/allgamedata'; //-- Este saca la data del cliente cuando juego, mientras este la ventana del cliente abierta.
 
 
-    constructor(private http: HttpClient){
-
-    }
+    constructor(private http: HttpClient){}
 
 
-    getChampionData(): Observable<any>{
+    getChampionData(): Observable<any>{ //--Trae los campeones.
         return this.http.get(`${this.ddragonBase}/${this.version}/data/es_ES/champion.json`)
     }
     
     
-    getItemData(): Observable<any>{
+    getItemData(): Observable<any>{ //--Trae los items.
         return this.http.get(`${this.ddragonBase}/${this.version}/data/es_ES/item.json`)
     }
 
 
-    getLiveClientData(): Observable<any>{
+    getLiveClientData(): Observable<any>{ //--Trae data del cliente actual.
         return this.http.get(this.liveClientUrl, {withCredentials: false})
     }
 
